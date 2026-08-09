@@ -1,0 +1,38 @@
+Summary
+Dataset Selected - W Stores for project 1
+W Stores retail dataset comprising three CSV files (sales.csv, features.csv, stores.csv) merged into a single DataFrame of 421,570 rows and 17 columns. Target variable: Weekly_Sales (regression task).
+
+EDA Findings
+Missing values: MarkDown1–5 had 64–73% missing values, representing weeks where no promotions were active.
+Seasonal trends: Monthly aggregation revealed clear sales spikes in November–December each year, consistent with holiday shopping behaviour.
+Store types: Type A stores generated significantly higher average weekly sales than Types B and C, strongly linked to larger store size.
+Holiday impact: Holiday weeks showed higher average sales but represented only 7% of records (93% non-holiday), creating a class imbalance.
+Outliers: 1,285 negative Weekly_Sales values found (0.3% of data), representing weeks where customer returns exceeded gross sales.
+Correlation: Weekly_Sales showed weak individual correlations with all features (max r = 0.24 for Size), suggesting sales is driven by a combination of factors rather than any single variable.
+Preprocessing Steps
+Merging: sales.csv, stores.csv, and features.csv merged on Store and Date into one DataFrame.
+
+Date conversion: Date parsed from string to datetime and decomposed into Year, Month, and Week integer features.
+
+Encoding:
+
+Type label-encoded (A=0, B=1, C=2)
+IsHoliday cast from boolean to integer (0/1)
+Duplicate IsHoliday_y dropped after merge
+Missing values: MarkDown1–5 NaNs replaced with 0, absence of a markdown entry indicates no promotion was active that week.
+
+Outliers: 1,285 negative Weekly_Sales rows dropped (0.3% of data). Dropping preferred over capping as the volume was negligible.
+
+Imbalanced data: IsHoliday imbalance (93/7) noted as a limitation. Oversampling not applied as this is a regression task, IsHoliday is an input feature, not the prediction label.
+
+Feature selection:
+
+Week dropped (r = 1.00 with Month, perfectly redundant)
+Fuel_Price dropped (r = 0.00 with Weekly_Sales)
+Temperature dropped (r = -0.002 with Weekly_Sales)
+Standardisation: All 14 input features scaled to mean=0, std=1 using StandardScaler. Weekly_Sales (target) left unscaled.
+
+Final Dataset
+Rows: 420,285
+Features: 14 input variables + 1 target (Weekly_Sales)
+Selected features: Store, Dept, Size, MarkDown1–5, CPI, Unemployment, Type_encoded, IsHoliday_encoded, Year, Month
